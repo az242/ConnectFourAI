@@ -32,6 +32,8 @@ public class AI {
 			
 		}else if(c.getComboPosition()==ComboPosition.Diagonal){
 			
+		}else{
+			
 		}
 		return (IndexMemory[]) im.toArray();
 	}
@@ -102,18 +104,40 @@ public class AI {
 	 */
 	private Combo helperCheck(int mode, int x, int y,board b,Combo c){
 		if(b.getIndex(x, y)!=player){
+			if(c.ComboSize()>1){
+				if(mode==0 || mode==4){
+					c.setComboPosition(ComboPosition.Horizontal);
+				}else if(mode==1 || mode==3){
+					c.setComboPosition(ComboPosition.Diagonal);
+				}else if(mode==2){
+					c.setComboPosition(ComboPosition.Vertical);
+				}
+			}else{
+				c.setComboPosition(ComboPosition.none);
+			}
 			return c;
-		}else if(mode==0 && y+1<b.getCols()){
+		}else if(mode==0 && y+1<b.getCols()){//horizontal right
 			return (helperCheck(0,x,y+1,b,c.addToCombo(new IndexMemory(x,y))));
-		}else if(mode==1 && x-1>=0 && y+1<b.getCols()){
+		}else if(mode==1 && x-1>=0 && y+1<b.getCols()){//diag bot right
 			return helperCheck(1,x-1,y+1,b,c.addToCombo(new IndexMemory(x,y)));
-		}else if(mode==2 && x-1>=0){
+		}else if(mode==2 && x-1>=0){// vertical
 			return helperCheck(2,x-1,y,b,c.addToCombo(new IndexMemory(x,y)));
-		}else if(mode==3 && x-1>=0 && y-1>=0){
+		}else if(mode==3 && x-1>=0 && y-1>=0){ // diag bot left
 			return helperCheck(3,x-1,y-1,b,c.addToCombo(new IndexMemory(x,y)));
-		}else if(mode==4 && y-1<=0){
+		}else if(mode==4 && y-1<=0){// horizontal left
 			return helperCheck(4,x,y-1,b,c.addToCombo(new IndexMemory(x,y)));
 		}else{
+			if(c.ComboSize()>1){
+				if(mode==0 || mode==4){
+					c.setComboPosition(ComboPosition.Horizontal);
+				}else if(mode==1 || mode==3){
+					c.setComboPosition(ComboPosition.Diagonal);
+				}else if(mode==2){
+					c.setComboPosition(ComboPosition.Vertical);
+				}
+			}else{
+				c.setComboPosition(ComboPosition.none);
+			}
 			return c;
 		}
 	}
