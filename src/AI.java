@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 import aiPackage.Combo;
 import aiPackage.IndexMemory;
 
@@ -41,41 +43,45 @@ public class AI {
 			}
 		}
 	}
-	private void getCombos(int x,int y,board b){
-		for(int asd=0;asd<5;asd++){
-			helperCheck(asd,x,y,b);
+	private ArrayList<Combo> getCombos(int x,int y,board b){
+		ArrayList<Combo> temp=new ArrayList<Combo>();
+		for(int a=0;a<5;a++){
+			temp.add(helperCheck(a,x,y,b,new Combo()));
 		}
+		return temp;
 	}
-	private Combo helperCheck(int mode, int x, int y,board b){
+	private Combo helperCheck(int mode, int x, int y,board b,Combo c){
 		if(b.getIndex(x, y).getSymbol()==player.getSymbol()){
-			
+			c.addToCombo(new IndexMemory(x,y));
+		}else{
+			return c;
 		}
 		
 		switch(mode){
 		case 0:
 			//right
 			if(y+1<b.getCols())
-				return helperCheck(0,x,y+1,b);
+				return helperCheck(0,x,y+1,b,c);
 			break;
 		case 1:
 			//diag top right
 			if(x-1>=0 && y+1<b.getCols())
-				return helperCheck(1,x-1,y+1,b);
+				return helperCheck(1,x-1,y+1,b,c);
 			break;
 		case 2:
 			//vertical up
 			if(x-1>=0)
-				return helperCheck(2,x-1,y,b);
+				return helperCheck(2,x-1,y,b,c);
 			break;
 		case 3:
 			//diag top left
 			if(x-1>=0 && y-1>=0)
-				return helperCheck(3,x-1,y-1,b);
+				return helperCheck(3,x-1,y-1,b,c);
 			break;
 		case 4:
 			//left
 			if(y-1<=0)
-				return helperCheck(4,x,y-1,b);
+				return helperCheck(4,x,y-1,b,c);
 			break;
 		}
 	}
