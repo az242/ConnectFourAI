@@ -1,0 +1,2 @@
+Prioritize middle of the board when starting
+

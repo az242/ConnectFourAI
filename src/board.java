@@ -1,9 +1,9 @@
 
 public class board {
-	int rows;
-	int cols;
+	private int rows;
+	private int cols;
 	players winner=null;
-	players uhh[][];
+	private players uhh[][];
 	public board(int rows,int cols){
 		this.rows=rows;
 		this.cols=cols;
@@ -43,7 +43,10 @@ public class board {
 		}
 		return true;
 	}
-	public boolean checkWon(int x,int y,players player){
+	public players getIndex(int x,int y){
+		return uhh[x][y];
+	}
+	private boolean checkWon(int x,int y,players player){
 		for(int asd=0;asd<5;asd++){
 			if(helperCheck(asd,x,y,0,player)){
 				return true;
@@ -86,5 +89,37 @@ public class board {
 			break;
 		}
 		return false;
+	}
+	public boolean contains(players player){
+		for(int x=0;x<rows;x++){
+			for(int y=0;y<cols;y++){
+				if(uhh[x][y]==player){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	public boolean isEmpty(){
+		for(int x=0;x<rows;x++){
+			for(int y=0;y<cols;y++){
+				if(uhh[x][y]!=players.NULL){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	public boolean isEmpty(int x,int y){
+		if(uhh[x][y]==players.NULL){
+			return true;
+		}
+		return false;
+	}
+	public int getRows() {
+		return rows;
+	}
+	public int getCols() {
+		return cols;
 	}
 }
