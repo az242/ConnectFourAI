@@ -1,3 +1,4 @@
+import aiPackage.IndexMemory;
 
 public class board {
 	private int rows;
@@ -43,7 +44,16 @@ public class board {
 		}
 		return true;
 	}
+	public players getIndex(IndexMemory im){
+		if(im.getX()>rows || im.getY()>cols || im.getX()<0 || im.getY()<0){
+			return null;
+		}
+		return uhh[im.getX()][im.getY()];
+	}
 	public players getIndex(int x,int y){
+		if(x>rows || y>cols || x<0 || y<0){
+			return null;
+		}
 		return uhh[x][y];
 	}
 	private boolean checkWon(int x,int y,players player){
@@ -55,6 +65,9 @@ public class board {
 		return false;
 	}
 	private boolean helperCheck(int mode, int x, int y,int count,players player){
+		if(x<0 || y<0){
+			return false;
+		}
 		if(uhh[x][y].getSymbol()==player.getSymbol()){
 			count++;
 			if(count==4)

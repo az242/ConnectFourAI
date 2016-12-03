@@ -13,8 +13,15 @@ public class AI {
 	public void AIMove(board b){
 		//if b already has AI's piece we can work off of
 		if(b.contains(player)){
-			
-			
+			ArrayList<IndexMemory> temp = getPossibleMovePosition(b,findMaxCombos(findAllCombos(b)));
+			int random = (int) Math.floor(Math.random()*temp.size());
+			if(temp.size()==0){
+				//move randomly when there are no optimal spots
+				b.move(player, (int)Math.floor(Math.random()*b.getCols()));
+			}else{
+				//move based on biggest combo
+				b.move(player, temp.get(random).getY());
+			}
 		}else{
 			//randomly place first piece
 			b.move(player, (int)Math.floor(Math.random()*b.getCols()));
@@ -24,27 +31,120 @@ public class AI {
 	 * possible moves based on COMBO SIZE and COMBO POSITION
 	 * will return a array of the possible spots to complete the combo
 	 */
-	public IndexMemory[] getPossibleMovePosition(board b,int col, Combo c){
+	public ArrayList<IndexMemory> getPossibleMovePosition(board b, ArrayList<Combo> c){
 		ArrayList<IndexMemory> im = new ArrayList<IndexMemory>();
-		if(c.getComboPosition()==ComboPosition.Horizontal){
-			
-		}else if(c.getComboPosition()==ComboPosition.Vertical){
-			
-		}else if(c.getComboPosition()==ComboPosition.Diagonal){
-			
-		}else{
-			
+		for(int x=0;x<c.size();x++){
+			if(c.get(x).getComboPosition()==ComboPosition.Horizontal){
+				IndexMemory left = getMostLeft(c.get(x));
+				left.setY(left.getY()-1);
+				IndexMemory right = getMostRight(c.get(x));
+				right.setY(right.getY()+1);
+				if(validMove(b,left)){
+					im.add(left);
+				}
+				if(validMove(b,right)){
+					im.add(right);
+				}
+			}else if(c.get(x).getComboPosition()==ComboPosition.Vertical){
+				IndexMemory top = getMostTop(c.get(x));
+				top.setY(top.getY()-1);
+				if(validMove(b,top)){
+					im.add(top);
+				}
+			}else if(c.get(x).getComboPosition()==ComboPosition.Diagonal){
+				IndexMemory left = getMostLeft(c.get(x));
+				IndexMemory right = getMostLeft(c.get(x));
+				left.setY(left.getY()-1);
+				right.setY(right.getY()+1);
+				if(left.getX()>right.getX()){
+					left.setX(left.getX()+1);
+					right.setX(right.getX()-1);
+				}else{
+					left.setX(left.getX()-1);
+					right.setX(right.getX()+1);
+				}
+				if(validMove(b,left)){
+					im.add(left);
+				}
+				if(validMove(b,right)){
+					im.add(right);
+				}
+			}else if(c.get(x).getComboPosition()==ComboPosition.none){
+				IndexMemory center = c.get(x).getCombo().get(0);
+				IndexMemory ontop = new IndexMemory(center.getX()+1,center.getY());
+				IndexMemory left = new IndexMemory(center.getX(),center.getY()-1);
+				IndexMemory right = new IndexMemory(center.getX(),center.getY()+1);
+				if(validMove(b,ontop)){
+					im.add(ontop);
+				}
+				if(validMove(b,left)){
+					im.add(left);
+				}
+				if(validMove(b,right)){
+					im.add(right);
+				}
+			}
 		}
-		return (IndexMemory[]) im.toArray();
+		return im;
+	}
+	/*
+	 * returns true or false if the board position is valid. 
+	 */
+	public boolean validMove(board b,IndexMemory im){
+		if(b.getIndex(im)==players.NULL && b.getIndex(im.getX()-1,im.getY())!=players.NULL){
+			return true;
+		}
+		return false;
+	}
+	/*
+	 * Gets the most left indexMemory of the combo
+	 */
+	public IndexMemory getMostLeft(Combo c){
+		IndexMemory temp = c.getCombo().get(0);
+		for(int x=0;x<c.getCombo().size();x++){
+			if(temp.getY()>c.getCombo().get(x).getY()){
+				temp = c.getCombo().get(x);
+			}
+		}
+		return temp;
+	}
+	/*
+	 * gets most right indexmemory of the combo
+	 */
+	public IndexMemory getMostRight(Combo c){
+		IndexMemory temp = c.getCombo().get(0);
+		for(int x=0;x<c.getCombo().size();x++){
+			if(temp.getY()<c.getCombo().get(x).getY()){
+				temp = c.getCombo().get(x);
+			}
+		}
+		return temp;
+	}
+	/*
+	 * Gets the most top indexMemory of the combo
+	 */
+	public IndexMemory getMostTop(Combo c){
+		IndexMemory temp = c.getCombo().get(0);
+		for(int x=0;x<c.getCombo().size();x++){
+			if(temp.getX()<c.getCombo().get(x).getX()){
+				temp = c.getCombo().get(x);
+			}
+		}
+		return temp;
 	}
 	/*
 	 * finds the biggest combo in a arrayList
 	 */
-	public Combo findMaxCombo(ArrayList<Combo> combos){
-		Combo biggestCombo = combos.get(0);
+	public ArrayList<Combo> findMaxCombos(ArrayList<Combo> combos){
+		ArrayList<Combo> biggestCombo = new ArrayList<Combo>();
+		int size=combos.get(0).ComboSize();
+		biggestCombo.add(combos.get(0));
 		for(int x=0;x<combos.size();x++){
-			if(biggestCombo.ComboSize()<combos.get(x).ComboSize()){
-				biggestCombo=combos.get(x);
+			if(size<combos.get(x).ComboSize()){
+				biggestCombo= new ArrayList<Combo>();
+				biggestCombo.add(combos.get(x));
+			}else if(size==combos.get(x).ComboSize()){
+				biggestCombo.add(combos.get(x));
 			}
 		}
 		return biggestCombo;
@@ -57,17 +157,17 @@ public class AI {
 		for(int x=0;x<b.getRows();x++){
 			for(int y=0;y<b.getCols();y++){
 				if(b.getIndex(x, y)==player){
-					Combo[] temp = getCombos(x,y,b);
+					ArrayList<Combo> temp = getCombos(x,y,b);
 					//merge all combos (leaving out duplicates)
-					for(int z=0;z<temp.length;z++){
+					for(int z=0;z<temp.size();z++){
 						boolean shouldAdd = true;
 						for(int a=0;a<combos.size();a++){
-							if(combos.get(a).equals(temp[z])){
+							if(combos.get(a).equals(temp.get(z))){
 								shouldAdd=false;
 							}
 						}
 						if(shouldAdd){
-							combos.add(temp[z]);
+							combos.add(temp.get(z));
 						}
 					}
 					//end merge
@@ -80,7 +180,7 @@ public class AI {
 	/*
 	 * Find all combos starting from the cords x,y on board b
 	 */
-	private Combo[] getCombos(int x,int y,board b){
+	private ArrayList<Combo> getCombos(int x,int y,board b){
 		ArrayList<Combo> temp=new ArrayList<Combo>();
 		for(int a=0;a<5;a++){
 			//check if list has that combo already
@@ -97,7 +197,7 @@ public class AI {
 				temp.add(tempCombo);
 			}
 		}
-		return (Combo[]) temp.toArray();
+		return temp;
 	}
 	/*
 	 * helperCheck goes through each of the directions. 
