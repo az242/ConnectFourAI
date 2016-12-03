@@ -13,7 +13,9 @@ public class AI {
 	public void AIMove(board b){
 		//if b already has AI's piece we can work off of
 		if(b.contains(player)){
+			//finds all the possible moves
 			ArrayList<IndexMemory> temp = getPossibleMovePosition(b,findMaxCombos(findAllCombos(b)));
+			//random move out of the list
 			int random = (int) Math.floor(Math.random()*temp.size());
 			if(temp.size()==0){
 				//move randomly when there are no optimal spots
@@ -34,6 +36,7 @@ public class AI {
 	public ArrayList<IndexMemory> getPossibleMovePosition(board b, ArrayList<Combo> c){
 		ArrayList<IndexMemory> im = new ArrayList<IndexMemory>();
 		for(int x=0;x<c.size();x++){
+			//scroll through all combos and add possible moves for each combo state.
 			if(c.get(x).getComboPosition()==ComboPosition.Horizontal){
 				IndexMemory left = getMostLeft(c.get(x));
 				left.setY(left.getY()-1);
@@ -91,7 +94,7 @@ public class AI {
 	 * returns true or false if the board position is valid. 
 	 */
 	public boolean validMove(board b,IndexMemory im){
-		if(b.getIndex(im)==players.NULL && b.getIndex(im.getX()-1,im.getY())!=players.NULL){
+		if(b.getIndex(im)==players.NULL && b.getIndex(im.getX()-1,im.getY())!=players.NULL && im.getX()>=0 && im.getX()<b.getRows() && im.getY()>=0 && im.getY()<b.getCols()){
 			return true;
 		}
 		return false;

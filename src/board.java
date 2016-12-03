@@ -65,13 +65,15 @@ public class board {
 		return false;
 	}
 	private boolean helperCheck(int mode, int x, int y,int count,players player){
-		if(x<0 || y<0){
+		if(x<0 || y<0 || x>rows || y>cols){
 			return false;
 		}
 		if(uhh[x][y].getSymbol()==player.getSymbol()){
 			count++;
 			if(count==4)
 				return true;
+		}else{
+			return false;
 		}
 		
 		switch(mode){
