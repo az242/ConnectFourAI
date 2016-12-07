@@ -22,6 +22,10 @@ public class board {
 			}
 			System.out.println();
 		}
+		for(int x=0;x<cols;x++){
+			System.out.print(x);
+		}
+		System.out.println();;
 	}
 	public boolean move(players player,int col){
 		if(col>=cols){
@@ -57,53 +61,41 @@ public class board {
 		return uhh[x][y];
 	}
 	private boolean checkWon(int x,int y,players player){
-		for(int asd=0;asd<5;asd++){
-			if(helperCheck(asd,x,y,0,player)){
-				return true;
-			}
+		if(helperCheck(0,x,y,player)+helperCheck(1,x,y,player)==4){ //horizontal
+			return true;
+		}else if(helperCheck(2,x,y,player)+helperCheck(3,x,y,player)==4){ //diag / 
+			return true;
+		}else if(helperCheck(4,x,y,player)+helperCheck(5,x,y,player)==4){// diag \
+			return true;
+		}else if(helperCheck(6,x,y,player)==4){ // vertical
+			return true;
 		}
 		return false;
 	}
-	private boolean helperCheck(int mode, int x, int y,int count,players player){
-		if(x<0 || y<0 || x>rows || y>cols){
-			return false;
+	private int helperCheck(int mode, int x, int y,players player){
+		if(x<0 || y<0 || x>=rows || y>=cols){
+			return 0;
 		}
 		if(uhh[x][y].getSymbol()==player.getSymbol()){
-			count++;
-			if(count==4)
-				return true;
+			if(mode==0){//horizontal right
+				return helperCheck(0,x,y+1,player) + 1;
+			}else if(mode==1){//horizontal left
+				return helperCheck(1,x,y-1,player) + 1;
+			}else if(mode==2){//diag / down left
+				return helperCheck(2,x-1,y-1,player) + 1;
+			}else if(mode==3){//diag / up left
+				return helperCheck(3,x+1,y+1,player) + 1;
+			}else if(mode==4){//diag \ down left
+				return helperCheck(4,x-1,y+1,player) + 1;
+			}else if(mode==5){//diag \ up right
+				return helperCheck(5,x+1,y-1,player) + 1;
+			}else if(mode==6){//vertical
+				return helperCheck(6,x-1,y,player) + 1;
+			}
 		}else{
-			return false;
+			return 0;
 		}
-		
-		switch(mode){
-		case 0:
-			//right
-			if(y+1<cols)
-				return helperCheck(0,x,y+1,count,player);
-			break;
-		case 1:
-			//diag bot right
-			if(x-1>=0 && y+1<cols)
-				return helperCheck(1,x-1,y+1,count,player);
-			break;
-		case 2:
-			//vertical down
-			if(x-1>=0)
-				return helperCheck(2,x-1,y,count,player);
-			break;
-		case 3:
-			//diag bot left
-			if(x-1>=0 && y-1>=0)
-				return helperCheck(3,x-1,y-1,count,player);
-			break;
-		case 4:
-			//left
-			if(y-1<=0)
-				return helperCheck(4,x,y-1,count,player);
-			break;
-		}
-		return false;
+		return 0;
 	}
 	public boolean contains(players player){
 		for(int x=0;x<rows;x++){

@@ -14,20 +14,25 @@ public class AI {
 		//if b already has AI's piece we can work off of
 		if(b.contains(player)){
 			//finds all the possible moves
-			ArrayList<IndexMemory> temp = getPossibleMovePosition(b,findMaxCombos(findAllCombos(b)));
+			ArrayList<IndexMemory> PossibleMoves = getPossibleMovePosition(b,findMaxCombos(findAllCombos(b)));
 			//random move out of the list
-			int random = (int) Math.floor(Math.random()*temp.size());
-			if(temp.size()==0){
+			int random = (int) Math.floor(Math.random()*PossibleMoves.size());
+			if(PossibleMoves.size()==0){
 				//move randomly when there are no optimal spots
 				b.move(player, (int)Math.floor(Math.random()*b.getCols()));
 			}else{
 				//move based on biggest combo
-				b.move(player, temp.get(random).getY());
+				b.move(player, PossibleMoves.get(random).getY());
 			}
 		}else{
 			//randomly place first piece
 			b.move(player, (int)Math.floor(Math.random()*b.getCols()));
 		}
+	}
+	public IndexMemory getBestMove(ArrayList<IndexMemory> temp){
+		
+		return null;
+		
 	}
 	/* Finds all possible moves that the bot can take related to biggest combo
 	 * possible moves based on COMBO SIZE and COMBO POSITION
@@ -94,7 +99,7 @@ public class AI {
 	 * returns true or false if the board position is valid. 
 	 */
 	public boolean validMove(board b,IndexMemory im){
-		if(b.getIndex(im)==players.NULL && b.getIndex(im.getX()-1,im.getY())!=players.NULL && im.getX()>=0 && im.getX()<b.getRows() && im.getY()>=0 && im.getY()<b.getCols()){
+		if(im.getX()>=0 && im.getX()<b.getRows() && im.getY()>=0 && im.getY()<b.getCols() && b.getIndex(im)==players.NULL && b.getIndex(im.getX()-1,im.getY())!=players.NULL){
 			return true;
 		}
 		return false;
@@ -150,6 +155,7 @@ public class AI {
 				biggestCombo.add(combos.get(x));
 			}
 		}
+		System.out.println(biggestCombo.get(0).ComboSize());
 		return biggestCombo;
 	}
 	/*
