@@ -12,9 +12,7 @@ public class main {
 			System.out.println("Enter your move");
 			int col = x.nextInt();
 			test.move(players.one, col);
-			test.draw();
 			ai.AIMove(test);
-			System.out.println("The AI moved!");
 			test.draw();
 		}
 		System.out.println(test.winner+" has won!");

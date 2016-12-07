@@ -3,13 +3,13 @@ package aiPackage;
 import java.util.ArrayList;
 
 public class Combo {
-	private ArrayList<IndexMemory> thisCombo;
+	private ArrayList<Coordinate> thisCombo;
 	private ComboPosition cp;
 	public Combo(){
-		thisCombo=new ArrayList<IndexMemory>();
+		thisCombo=new ArrayList<Coordinate>();
 		cp=ComboPosition.none;
 	}
-	public ArrayList<IndexMemory> getCombo(){
+	public ArrayList<Coordinate> getCombo(){
 		return thisCombo;
 	}
 	public void setComboPosition(ComboPosition cp){
@@ -21,11 +21,11 @@ public class Combo {
 	public int ComboSize(){
 		return thisCombo.size();
 	}
-	public Combo addToCombo(IndexMemory im){
+	public Combo addToCombo(Coordinate im){
 		thisCombo.add(im);
 		return this;
 	}
-	public boolean contains(IndexMemory im){
+	public boolean contains(Coordinate im){
 		for(int x=0;x<thisCombo.size();x++){
 			if(thisCombo.get(x).equals(im)){
 				return true;

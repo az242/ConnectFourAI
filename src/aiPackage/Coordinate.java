@@ -1,6 +1,6 @@
 package aiPackage;
 
-public class IndexMemory {
+public class Coordinate {
 	int x,y;
 	public int getX() {
 		return x;
@@ -14,14 +14,18 @@ public class IndexMemory {
 	public void setY(int y) {
 		this.y = y;
 	}
-	public IndexMemory(int x,int y){
+	public Coordinate(int x,int y){
 		this.x=x;
 		this.y=y;
 	}
-	public boolean equals(IndexMemory im){
+	public boolean equals(Coordinate im){
 		if(im.getX()==x && im.getY()==y){
 			return true;
 		}
 		return false;
+	}
+	@Override
+	public String toString(){
+		return x+","+y;
 	}
 }

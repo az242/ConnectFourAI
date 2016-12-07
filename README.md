@@ -1,5 +1,5 @@
 # ConnectFourAI
-Making an AI for connect 4
+An AI for connect four
 
 Base game made by Andrew Zhu
 
@@ -9,3 +9,4 @@ AI Goals:
 -Block other players
 -make traps
 -100% win rate
+-Modularize it so it works with any platform instead of only my connect 4

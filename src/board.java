@@ -1,4 +1,4 @@
-import aiPackage.IndexMemory;
+import aiPackage.Coordinate;
 
 public class board {
 	private int rows;
@@ -17,11 +17,13 @@ public class board {
 	}
 	public void draw(){
 		for(int x=rows-1;x>=0;x--){
+			System.out.print(x);
 			for(int y=0;y<cols;y++){
 				System.out.print(uhh[x][y].getSymbol());
 			}
 			System.out.println();
 		}
+		System.out.print(" ");
 		for(int x=0;x<cols;x++){
 			System.out.print(x);
 		}
@@ -48,7 +50,7 @@ public class board {
 		}
 		return true;
 	}
-	public players getIndex(IndexMemory im){
+	public players getIndex(Coordinate im){
 		if(im.getX()>rows || im.getY()>cols || im.getX()<0 || im.getY()<0){
 			return null;
 		}
@@ -61,11 +63,11 @@ public class board {
 		return uhh[x][y];
 	}
 	private boolean checkWon(int x,int y,players player){
-		if(helperCheck(0,x,y,player)+helperCheck(1,x,y,player)==4){ //horizontal
+		if(helperCheck(0,x,y+1,player)+helperCheck(1,x,y,player)==4){ //horizontal
 			return true;
-		}else if(helperCheck(2,x,y,player)+helperCheck(3,x,y,player)==4){ //diag / 
+		}else if(helperCheck(2,x-1,y-1,player)+helperCheck(3,x,y,player)==4){ //diag / 
 			return true;
-		}else if(helperCheck(4,x,y,player)+helperCheck(5,x,y,player)==4){// diag \
+		}else if(helperCheck(4,x-1,y+1,player)+helperCheck(5,x,y,player)==4){// diag \
 			return true;
 		}else if(helperCheck(6,x,y,player)==4){ // vertical
 			return true;
